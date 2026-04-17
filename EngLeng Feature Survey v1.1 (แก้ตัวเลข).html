@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสำรวจความต้องการใช้ฟีเจอร์ AI - บริษัท อิง เลง (ไทยแลนด์) จำกัด (v1.1)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1B3472;
+            --dark-color: #0F2150;
+            --teal: #2AB5A0;
+            --dark-gray: #2D2D2D;
+            --medium-gray: #5A5A5A;
+            --light-gray: #E8E8E8;
+            --white: #FFFFFF;
+            --bg-gray: #F5F5F5;
+            --accent-light: #E6F7F3;
+            --optional-bg: #FFFDE7;
+            --optional-border: #FFD54F;
+            --blue-quoted: #0070C0;
+            --blue-quoted-bg: #E8F2FC;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Prompt', sans-serif; background: var(--bg-gray); color: var(--dark-gray); line-height: 1.4; font-size: 14px; }
+        .container { max-width: 950px; margin: 0 auto; padding: 10px; }
+        .header {
+            background: linear-gradient(135deg, #1B3472 0%, #0F2150 100%);
+            color: var(--white); padding: 15px 20px; border-radius: 12px; margin-bottom: 15px; text-align: center;
+        }
+        .header h1 { font-size: 1.3rem; font-weight: 600; }
+        .header p { font-size: 0.85rem; opacity: 0.9; }
+        .header .company-name { font-size: 0.95rem; font-weight: 500; margin-top: 5px; }
+        .header .objective { font-size: 0.75rem; opacity: 0.85; margin-top: 5px; line-height: 1.4; }
+        .header .section-flow { font-size: 0.7rem; opacity: 0.7; margin-top: 8px; letter-spacing: 0.5px; }
+        .section { background: var(--white); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .section-header { display: flex; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid var(--light-gray); }
+        .section-letter { width: 32px; height: 32px; background: var(--primary-color); color: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1rem; margin-right: 10px; flex-shrink: 0; }
+        .section-title { font-size: 1rem; font-weight: 600; color: var(--dark-gray); }
+        .section-subtitle { font-size: 0.75rem; color: var(--primary-color); font-weight: 600; margin-left: auto; }
+        .question { margin-bottom: 15px; }
+        .question:last-child { margin-bottom: 0; }
+        .question-label { font-weight: 500; color: var(--dark-gray); margin-bottom: 8px; display: block; font-size: 0.9rem; }
+        .question-sublabel { font-size: 0.75rem; color: var(--medium-gray); margin-bottom: 10px; line-height: 1.5; }
+        input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 2px solid var(--light-gray); border-radius: 8px; font-family: inherit; font-size: 0.9rem; transition: all 0.3s ease; }
+        input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--primary-color); }
+        textarea { min-height: 70px; resize: vertical; }
+        .dotted-input { border: none; border-bottom: 2px dotted var(--light-gray); border-radius: 0; padding: 8px 5px; background: transparent; }
+        .dotted-input::placeholder { color: #ccc; font-style: italic; }
+        .dotted-input:focus { border-bottom-color: var(--primary-color); box-shadow: none; }
+        .option-group { display: flex; flex-direction: column; gap: 6px; }
+        .option { display: flex; align-items: center; padding: 10px 12px; background: var(--bg-gray); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; }
+        .option:hover { background: var(--light-gray); }
+        .option.selected { background: var(--accent-light); border-color: var(--primary-color); }
+        .option .checkmark { width: 18px; height: 18px; border: 2px solid var(--medium-gray); border-radius: 50%; margin-right: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        .option.checkbox .checkmark { border-radius: 4px; }
+        .option.selected .checkmark { background: var(--primary-color); border-color: var(--primary-color); }
+        .option.selected .checkmark::after { content: "✓"; color: white; font-size: 11px; font-weight: bold; }
+        .option-title { font-size: 0.85rem; color: var(--dark-gray); }
+        .option.has-input { flex-wrap: wrap; }
+        .option.has-input .other-input { pointer-events: none; }
+        .option.has-input.selected .other-input { pointer-events: auto; }
+        .option.has-input .other-input { width: 100%; margin-top: 8px; padding: 8px; border: 1px dashed var(--light-gray); border-radius: 6px; font-family: inherit; font-size: 0.85rem; display: none; }
+        .option.has-input.selected .other-input { display: block; }
+        .level-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .level-option { display: flex; align-items: center; padding: 10px 12px; background: var(--bg-gray); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; }
+        .level-option:hover { background: var(--light-gray); }
+        .level-option.selected { background: var(--accent-light); border-color: var(--primary-color); }
+        .level-badge { width: 36px; height: 36px; background: var(--medium-gray); color: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 600; margin-right: 10px; font-size: 0.75rem; flex-shrink: 0; }
+        .level-option.selected .level-badge { background: var(--primary-color); }
+        .level-option .option-content { flex: 1; min-width: 0; }
+        .level-option .option-title { font-size: 0.8rem; line-height: 1.3; }
+        .freq-options { display: flex; flex-wrap: wrap; gap: 6px; }
+        .freq-option { padding: 8px 14px; background: var(--bg-gray); border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; font-size: 0.8rem; }
+        .freq-option:hover { background: var(--light-gray); }
+        .freq-option.selected { background: var(--accent-light); border-color: var(--primary-color); color: var(--primary-color); font-weight: 500; }
+        .freq-option.other-tool { border-style: dashed; border-color: var(--light-gray); }
+        .freq-option.other-tool.selected { border-style: solid; }
+        .rating-grid { display: grid; gap: 6px; }
+        .rating-row { display: flex; align-items: center; padding: 8px 10px; background: var(--bg-gray); border-radius: 8px; gap: 10px; }
+        .rating-label { flex: 1; font-size: 0.8rem; min-width: 0; }
+        .rating-buttons { display: flex; gap: 4px; flex-shrink: 0; }
+        .rating-btn { width: 32px; height: 32px; border: 2px solid var(--light-gray); border-radius: 6px; background: var(--white); cursor: pointer; font-weight: 500; font-size: 0.85rem; transition: all 0.2s ease; }
+        .rating-btn:hover { border-color: var(--primary-color); }
+        .rating-btn.selected { background: var(--primary-color); border-color: var(--primary-color); color: var(--white); }
+        .dynamic-inputs { display: flex; flex-direction: column; gap: 6px; }
+        .dynamic-input-row { display: flex; align-items: center; gap: 8px; }
+        .dynamic-input-row input { flex: 1; }
+        .add-btn, .remove-btn { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; font-size: 1rem; transition: all 0.2s ease; flex-shrink: 0; }
+        .add-btn { background: var(--primary-color); color: var(--white); }
+        .add-btn:hover { background: var(--dark-color); }
+        .remove-btn { background: var(--light-gray); color: var(--medium-gray); }
+        .remove-btn:hover { background: #e53935; color: var(--white); }
+        .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .checkbox-grid .option { padding: 8px 10px; }
+        .checkbox-grid .option-title { font-size: 0.8rem; line-height: 1.3; }
+
+        /* ===== COLLAPSIBLE DROPDOWN ===== */
+        .collapsible-category { margin-bottom: 10px; border: 1px solid var(--light-gray); border-radius: 10px; overflow: hidden; transition: all 0.3s ease; }
+        .collapsible-category.filter-dimmed { opacity: 0.5; order: 100; } /* V5: จางแต่ยังกดได้ */
+        .collapsible-category.filter-dimmed .collapsible-header { background: #f5f5f5; cursor: pointer; }
+        /* V5: ลบ 🔒 — แถบไม่ตรงแผนกยังกดได้ */
+        .collapsible-header { display: flex; align-items: center; padding: 10px 14px; background: var(--bg-gray); cursor: pointer; user-select: none; transition: background 0.2s; gap: 8px; }
+        .collapsible-header:hover { background: var(--light-gray); }
+        .collapsible-header .arrow { font-size: 0.7rem; transition: transform 0.3s; flex-shrink: 0; color: var(--primary-color); }
+        .collapsible-header .arrow.open { transform: rotate(90deg); }
+        .collapsible-header .cat-icon { font-size: 1rem; flex-shrink: 0; }
+        .collapsible-header .cat-label { font-size: 0.85rem; font-weight: 600; color: var(--dark-gray); flex: 1; }
+        .collapsible-header .cat-count { font-size: 0.7rem; color: var(--medium-gray); background: var(--white); padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+        .collapsible-body { display: none; padding: 8px 12px 12px; }
+        .collapsible-body.open { display: block; }
+        .collapsible-header .filter-hint { font-size: 0.65rem; color: var(--primary-color); opacity: 0.7; margin-left: 4px; }
+
+        /* ===== HR Sub-groups ===== */
+        .sub-group-title { font-size: 0.78rem; font-weight: 600; color: var(--primary-color); margin: 10px 0 6px; padding-bottom: 3px; border-bottom: 1px dashed var(--primary-color); display: inline-block; }
+        .sub-group-title:first-child { margin-top: 0; }
+
+        /* ===== Optional Section G ===== */
+        .optional-banner { background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%); border: 2px solid #EF5350; border-radius: 12px; padding: 12px 16px; margin-bottom: 15px; text-align: center; }
+        .optional-banner h3 { font-size: 0.95rem; color: #D32F2F; margin-bottom: 4px; }
+        .optional-banner p { font-size: 0.78rem; color: var(--medium-gray); }
+
+        .progress-container { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--light-gray); z-index: 100; }
+        .progress-bar { height: 100%; background: var(--primary-color); transition: width 0.3s ease; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 15px; gap: 10px; }
+        .nav-btn { padding: 12px 24px; border-radius: 10px; font-family: inherit; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; border: none; }
+        .nav-btn.prev { background: var(--light-gray); color: var(--dark-gray); }
+        .nav-btn.prev:hover { background: var(--medium-gray); color: var(--white); }
+        .nav-btn.next { background: var(--primary-color); color: var(--white); flex: 1; max-width: 200px; }
+        .nav-btn.next:hover { background: var(--dark-color); }
+        .step-indicator { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
+        .step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--light-gray); transition: all 0.3s ease; }
+        .step-dot.active { background: var(--primary-color); transform: scale(1.2); }
+        .step-dot.completed { background: var(--primary-color); }
+        .success-page { text-align: center; padding: 40px 20px; }
+        .success-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #1B3472 0%, #0F2150 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2.5rem; color: var(--white); }
+        .success-page h2 { font-size: 1.4rem; margin-bottom: 10px; color: var(--dark-gray); }
+        .success-page p { color: var(--medium-gray); margin-bottom: 20px; font-size: 0.9rem; }
+        .footer { text-align: center; padding: 15px; color: var(--medium-gray); font-size: 0.75rem; }
+        .location-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .other-tool-input { display: none; margin-top: 8px; padding: 8px 12px; border: 1px dashed var(--light-gray); border-radius: 6px; font-size: 0.85rem; width: 100%; }
+        .other-tool-input.show { display: block; }
+        @media (max-width: 600px) {
+            .level-options { grid-template-columns: 1fr; }
+            .checkbox-grid { grid-template-columns: 1fr; }
+            .location-grid { grid-template-columns: 1fr; }
+            .rating-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .rating-buttons { width: 100%; justify-content: space-between; }
+        }
+
+        /* ===== V5: Smart Reorder — relevant categories ===== */
+        .collapsible-category.dept-relevant { order: -1; border: 2px solid var(--primary-color); border-radius: 10px; }
+        .collapsible-category.dept-relevant .collapsible-header { background: var(--accent-light); }
+        .collapsible-category.dept-relevant .collapsible-header::before { content: '▼'; font-size: 0.6rem; color: var(--primary-color); margin-right: 4px; }
+        .collapsible-category.dept-relevant .collapsible-header .click-hint { display: inline; }
+        /* handled by .filter-dimmed */
+        .collapsible-category.filter-dimmed:hover { opacity: 0.75; }
+        .click-hint { display: none; font-size: 0.6rem; color: var(--primary-color); margin-left: auto; padding: 2px 6px; background: var(--white); border-radius: 4px; border: 1px solid var(--primary-color); }
+        #b1Categories, #c1Categories, #gCategories { display: flex; flex-direction: column; }
+
+        /* ===== V5: E2 Search Box ===== */
+        .e2-search-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; position: relative; }
+        .e2-search { width: 100%; padding: 10px 12px; border: 2px solid var(--light-gray); border-radius: 10px; font-family: inherit; font-size: 0.85rem; outline: none; transition: border-color 0.3s; }
+        .e2-search:focus { border-color: var(--primary-color); }
+        .e2-search::placeholder { color: #ccc; font-size: 0.75rem; font-weight: 300; }
+        .e2-search-icon { flex-shrink: 0; color: #888; display: flex; align-items: center; }
+        .e2-search-results { position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border: 2px solid var(--primary-color); border-radius: 10px; margin-top: 4px; max-height: 250px; overflow-y: auto; z-index: 50; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+        .e2-search-results.show { display: block; }
+        .e2-search-item { display: flex; align-items: center; padding: 8px 12px; cursor: pointer; gap: 8px; border-bottom: 1px solid var(--light-gray); }
+        .e2-search-item:last-child { border-bottom: none; }
+        .e2-search-item:hover { background: var(--accent-light); }
+        .e2-search-item .cat-name { font-size: 0.7rem; color: var(--primary-color); background: var(--accent-light); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--primary-color); flex-shrink: 0; }
+        .e2-search-item .item-name { font-size: 0.82rem; flex: 1; }
+        .e2-search-item .item-check { width: 18px; height: 18px; border: 2px solid var(--primary-color); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--white); }
+        .e2-search-item.checked .item-check { background: var(--primary-color); }
+        .e2-search-item.checked .item-check::after { content: '✓'; }
+
+        /* ===== V5: E2 2-Column Layout ===== */
+        .e2-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        @media (max-width: 600px) { .e2-grid { grid-template-columns: 1fr; } }
+
+        /* ===== V5: F1 Compact 2-Column ===== */
+        .f1-compact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .f1-compact-row { display: flex; align-items: center; padding: 6px 8px; background: var(--bg-gray); border-radius: 8px; gap: 6px; }
+        .f1-compact-label { flex: 1; font-size: 0.75rem; min-width: 0; line-height: 1.3; }
+        .f1-compact-btns { display: flex; gap: 2px; flex-shrink: 0; }
+        .f1-compact-btn { width: 26px; height: 26px; border: 1.5px solid var(--light-gray); border-radius: 5px; background: var(--white); cursor: pointer; font-weight: 500; font-size: 0.75rem; transition: all 0.2s; }
+        .f1-compact-btn:hover { border-color: var(--primary-color); }
+        .f1-compact-btn.selected { background: var(--primary-color); border-color: var(--primary-color); color: var(--white); }
+        @media (max-width: 600px) { .f1-compact-grid { grid-template-columns: 1fr; } }
+
+        /* ===== V1.1 EngLeng: Quoted Feature Styling ===== */
+        .option.checkbox.quoted { background: var(--blue-quoted-bg); border: 2px solid var(--blue-quoted); position: relative; }
+        .option.checkbox.quoted:hover { background: #D8E8F9; }
+        .option.checkbox.quoted.selected { background: #C8DCF5; border-color: var(--blue-quoted); }
+        .option.checkbox.quoted .option-title { color: var(--blue-quoted); font-weight: 600; }
+        .option.checkbox.quoted .checkmark { border-color: var(--blue-quoted); }
+        .option.checkbox.quoted.selected .checkmark { background: var(--blue-quoted); border-color: var(--blue-quoted); }
+        .q-tag { display: inline-block; background: var(--blue-quoted); color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+        .feature-detail { display: block; font-size: 0.72rem; color: var(--medium-gray); margin-top: 4px; font-style: italic; font-weight: 400; line-height: 1.4; }
+        .option.checkbox.quoted .feature-detail { color: #2A5584; }
+        .source-tag { display: block; font-size: 0.68rem; color: var(--medium-gray); margin-top: 3px; font-style: italic; opacity: 0.85; }
+
+        /* V1.1 EngLeng: Quoted Banner (replaces Optional Banner for Section E) */
+        .quoted-banner { background: linear-gradient(135deg, #E8F2FC 0%, #D8E8F9 100%); border: 2px solid var(--blue-quoted); border-radius: 12px; padding: 14px 18px; margin-bottom: 15px; text-align: center; }
+        .quoted-banner h3 { font-size: 1rem; color: var(--blue-quoted); margin-bottom: 6px; font-weight: 700; }
+        .quoted-banner p { font-size: 0.78rem; color: var(--medium-gray); line-height: 1.55; }
+        .quoted-banner .blue-dot { display: inline-block; width: 10px; height: 10px; background: var(--blue-quoted); border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+    </style>
+</head>
+<body>
+<div class="progress-container"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+<div class="container">
+    <div class="header">
+        <h1>แบบสำรวจความต้องการใช้ฟีเจอร์ AI ในการทำงาน</h1>
+        <div class="company-name">🧹 บริษัท อิง เลง (ไทยแลนด์) จำกัด</div>
+        <p style="font-size:0.8rem;opacity:0.85;font-style:italic;">Eng Leng (Thailand) Co., Ltd. — ในเครือ Hygieia Group (HKEX: 1650)</p>
+        <p style="margin-top:6px;font-weight:500;">จัดทำโดย: <span style="color:#2AB5A0;font-weight:700;">One 7AI</span> · v1.1 Feature-Only Survey</p>
+        <p>⏱️ ใช้เวลาประมาณ 10-15 นาที | ข้อมูลจะถูกเก็บเป็นความลับ</p>
+        <div class="objective">วัตถุประสงค์: เพื่อสำรวจปัญหาในการทำงานและความต้องการใช้ฟีเจอร์ AI เพื่อออกแบบระบบคล้าย ERP ที่รวมการทำงานทุกแผนกไว้ในโปรแกรมเดียว (Sales / จัดซื้อ / บัญชี / HR / Stock / Training และอื่น ๆ) โดยมีเป้าหมาย Launch เดือนกรกฎาคม 2570</div>
+    </div>
+
+    <div id="surveyContainer">
+        <div class="step-indicator" id="stepIndicator"></div>
+
+<!-- ═══════════════ STEP 1: Section A ═══════════════ -->
+<div class="step" data-step="1">
+<div class="section">
+    <div class="section-header"><div class="section-letter">A</div><div class="section-title">ข้อมูลทั่วไป</div></div>
+    <div class="question"><label class="question-label">A1. ชื่อ-นามสกุล</label><input type="text" id="name" placeholder="กรอกชื่อ-นามสกุล"></div>
+    <div class="question"><label class="question-label">A2. ตำแหน่ง</label><input type="text" id="position" placeholder="กรอกตำแหน่งงาน"></div>
+    <div class="question">
+        <label class="question-label">A3. แผนก/ทีม (เลือกได้ 1 ข้อ)</label>
+        <div class="option-group" id="departmentGroup">
+            <label class="option" onclick="selectDept(this,'mgmt')"><input type="radio" name="department" value="mgmt" style="display:none"><span class="checkmark"></span><span class="option-title">👔 ผู้บริหาร / Management</span></label>
+            <label class="option" onclick="selectDept(this,'op')"><input type="radio" name="department" value="op" style="display:none"><span class="checkmark"></span><span class="option-title">📍 Operation / ฝ่ายปฏิบัติการ (สายตรวจ / Supervisor / หัวหน้าไซต์)</span></label>
+            <label class="option" onclick="selectDept(this,'hr')"><input type="radio" name="department" value="hr" style="display:none"><span class="checkmark"></span><span class="option-title">👥 HR / ทรัพยากรบุคคล (สรรหา / พัฒนาบุคลากร)</span></label>
+            <label class="option" onclick="selectDept(this,'payroll')"><input type="radio" name="department" value="payroll" style="display:none"><span class="checkmark"></span><span class="option-title">⏰ Payroll / บัญชีเงินเดือน (เปโล)</span></label>
+            <label class="option" onclick="selectDept(this,'sales')"><input type="radio" name="department" value="sales" style="display:none"><span class="checkmark"></span><span class="option-title">💼 Sales / ฝ่ายขาย / Business Development</span></label>
+            <label class="option" onclick="selectDept(this,'procurement')"><input type="radio" name="department" value="procurement" style="display:none"><span class="checkmark"></span><span class="option-title">🛒 จัดซื้อ / Procurement</span></label>
+            <label class="option" onclick="selectDept(this,'accounting')"><input type="radio" name="department" value="accounting" style="display:none"><span class="checkmark"></span><span class="option-title">💰 บัญชี / การเงิน (Accounting/Finance)</span></label>
+            <label class="option" onclick="selectDept(this,'stock')"><input type="radio" name="department" value="stock" style="display:none"><span class="checkmark"></span><span class="option-title">📦 Stock / คลังวัสดุ-อุปกรณ์</span></label>
+            <label class="option" onclick="selectDept(this,'qa')"><input type="radio" name="department" value="qa" style="display:none"><span class="checkmark"></span><span class="option-title">✅ QA / Quality Assurance</span></label>
+            <label class="option" onclick="selectDept(this,'it')"><input type="radio" name="department" value="it" style="display:none"><span class="checkmark"></span><span class="option-title">💻 IT / สารสนเทศ</span></label>
+            <label class="option" onclick="selectDept(this,'training')"><input type="radio" name="department" value="training" style="display:none"><span class="checkmark"></span><span class="option-title">🎓 Training / ฝึกอบรม</span></label>
+            <label class="option" onclick="selectDept(this,'admin')"><input type="radio" name="department" value="admin" style="display:none"><span class="checkmark"></span><span class="option-title">📋 Admin / ธุรการ / สำนักงาน</span></label>
+            <label class="option" onclick="selectDept(this,'janitor')"><input type="radio" name="department" value="janitor" style="display:none"><span class="checkmark"></span><span class="option-title">🧹 พนักงานภาคสนาม — แม่บ้าน (Janitor/Cleaning)</span></label>
+            <label class="option" onclick="selectDept(this,'room')"><input type="radio" name="department" value="room" style="display:none"><span class="checkmark"></span><span class="option-title">🛏️ พนักงานภาคสนาม — Room Attendant (ดูแลห้องพักโรงแรม)</span></label>
+            <label class="option" onclick="selectDept(this,'steward')"><input type="radio" name="department" value="steward" style="display:none"><span class="checkmark"></span><span class="option-title">🍽️ พนักงานภาคสนาม — Steward (ล้างจาน / พนักงานครัว)</span></label>
+            <label class="option" onclick="selectDept(this,'table')"><input type="radio" name="department" value="table" style="display:none"><span class="checkmark"></span><span class="option-title">🍴 พนักงานภาคสนาม — Table Service (ดูแลโต๊ะในร้านอาหาร)</span></label>
+            <label class="option" onclick="selectDept(this,'public')"><input type="radio" name="department" value="public" style="display:none"><span class="checkmark"></span><span class="option-title">🚪 พนักงานภาคสนาม — Public Area (พื้นที่ส่วนกลาง)</span></label>
+            <label class="option has-input" onclick="selectDept(this,'other')" id="deptOtherOption"><input type="radio" name="department" value="other" style="display:none"><span class="checkmark"></span><span class="option-title">อื่นๆ</span><input type="text" class="other-input" id="deptOtherInput" placeholder="ระบุแผนก..." onclick="event.stopPropagation()"></label>
+        </div>
+    </div>
+    <div class="question">
+        <label class="question-label">A4. สถานที่ปฏิบัติงาน (เลือกได้ 1 ข้อ)</label>
+        <div class="option-group">
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="hq" style="display:none"><span class="checkmark"></span><span class="option-title">🏢 สำนักงานใหญ่ — 90/103 หมู่ 15 ต.บางแก้ว อ.บางพลี จ.สมุทรปราการ 10540</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="hotel" style="display:none"><span class="checkmark"></span><span class="option-title">🏨 ไซต์ลูกค้า — โรงแรม / รีสอร์ท</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="office" style="display:none"><span class="checkmark"></span><span class="option-title">🏢 ไซต์ลูกค้า — อาคารสำนักงาน / ออฟฟิศ</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="condo" style="display:none"><span class="checkmark"></span><span class="option-title">🏠 ไซต์ลูกค้า — คอนโดมิเนียม / ที่พักอาศัย</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="mall" style="display:none"><span class="checkmark"></span><span class="option-title">🛍️ ไซต์ลูกค้า — ห้างสรรพสินค้า / ศูนย์การค้า</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="factory" style="display:none"><span class="checkmark"></span><span class="option-title">🏭 ไซต์ลูกค้า — โรงงานอุตสาหกรรม / คลังสินค้า</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="fnb" style="display:none"><span class="checkmark"></span><span class="option-title">🍽️ ไซต์ลูกค้า — ร้านอาหาร / F&amp;B</span></label>
+            <label class="option" onclick="selectOption(this,'location')"><input type="radio" name="location" value="hospital" style="display:none"><span class="checkmark"></span><span class="option-title">🏥 ไซต์ลูกค้า — โรงพยาบาล / สถานพยาบาล</span></label>
+            <label class="option has-input" onclick="selectOption(this,'location')"><input type="radio" name="location" value="other-location" style="display:none"><span class="checkmark"></span><span class="option-title">อื่นๆ</span><input type="text" class="other-input" id="locationOtherInput" placeholder="ระบุสถานที่..." onclick="event.stopPropagation()"></label>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ═══════════════ STEP 2: Section B — งานประจำวัน ═══════════════ -->
+<div class="step" data-step="2" style="display:none">
+<div class="section">
+    <div class="section-header"><div class="section-letter">B</div><div class="section-title">ลักษณะงานประจำวัน</div><span class="section-subtitle">เลือกได้หลายข้อ</span></div>
+    <div class="question" id="b1Question">
+        <label class="question-label">B1. งานที่ทำเป็นประจำ</label>
+        <div id="b1Categories"></div>
+    </div>
+    <div class="question">
+        <label class="question-label">B2. งานที่ต้องทำซ้ำๆ เป็นประจำทุกวัน หรือเกิดขึ้นบ่อยๆ</label>
+        <p class="question-sublabel">กรุณาเรียงลำดับจากมากไปน้อย (1 คือมากที่สุด)<br>💡 การระบุขั้นตอนและบริบทอย่างละเอียด คือกุญแจสำคัญที่ทำให้ AI เข้าใจงานของท่านได้อย่างสมบูรณ์</p>
+        <div class="dynamic-inputs" id="repeatWorkInputs">
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="อันดับ 1: ....................................................."><button class="add-btn" onclick="addDynamicInput('repeatWorkInputs',5,'อันดับ')">+</button></div>
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="อันดับ 2: ....................................................."><button class="remove-btn" onclick="removeDynamicInput(this)">×</button></div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ═══════════════ STEP 3: Section C — ปัญหา ═══════════════ -->
+<div class="step" data-step="3" style="display:none">
+<div class="section">
+    <div class="section-header"><div class="section-letter">C</div><div class="section-title">ปัญหาและความท้าทาย</div></div>
+    <div class="question" id="c1Question">
+        <label class="question-label">C1. ปัญหาที่พบบ่อยในการทำงาน (เลือกได้หลายข้อ)</label>
+        <div id="c1Categories"></div>
+    </div>
+    <div class="question">
+        <label class="question-label">C2. กรุณาระบุขั้นตอนการทำงานที่อาจจะสร้างความลำบาก (Pain Points)</label>
+        <p class="question-sublabel">หรือการทำงานที่เรารู้สึกว่า "น่าจะมีวิธีที่ดีกว่านี้"<br>💡 การระบุขั้นตอนและบริบทอย่างละเอียด คือกุญแจสำคัญที่ทำให้ AI เข้าใจงานของท่านได้อย่างสมบูรณ์</p>
+        <div class="dynamic-inputs" id="painPointInputs">
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="อันดับ 1: ....................................................."><button class="add-btn" onclick="addDynamicInput('painPointInputs',5,'อันดับ')">+</button></div>
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="อันดับ 2: ....................................................."><button class="remove-btn" onclick="removeDynamicInput(this)">×</button></div>
+        </div>
+    </div>
+    <div class="question">
+        <label class="question-label">C3. ปัญหาที่อยากให้ AI ช่วยมากที่สุด 3 อันดับแรก</label>
+        <div class="dynamic-inputs">
+            <div class="dynamic-input-row"><input type="text" id="aiHelp1" class="dotted-input" placeholder="อันดับ 1: ....................................................."></div>
+            <div class="dynamic-input-row"><input type="text" id="aiHelp2" class="dotted-input" placeholder="อันดับ 2: ....................................................."></div>
+            <div class="dynamic-input-row"><input type="text" id="aiHelp3" class="dotted-input" placeholder="อันดับ 3: ....................................................."></div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ═══════════════ STEP 4: Section D — ข้อเสนอแนะ ═══════════════ -->
+<div class="step" data-step="4" style="display:none">
+<div class="section">
+    <div class="section-header"><div class="section-letter">D</div><div class="section-title">ข้อเสนอแนะเพิ่มเติม</div></div>
+    <div class="question">
+        <label class="question-label">D1. กรุณาระบุการให้บริการ หรือเครื่องมือใดๆ ที่คิดว่าเป็นกุญแจสำคัญ (Key Success) ที่ทำให้ภารกิจสำเร็จได้</label>
+        <p class="question-sublabel">เช่น เคล็ดลับ: "เมื่อมีระบบเช็คอินภาพถ่าย ช่วยลดการโกงเวลา 80%" / "เมื่อตอบลูกค้าภายใน 15 นาที ลูกค้าต่อสัญญาได้เกือบทุกครั้ง"<br>💡 การระบุขั้นตอนและบริบทอย่างละเอียด คือกุญแจสำคัญที่ทำให้ AI เข้าใจงานของท่านได้อย่างสมบูรณ์</p>
+        <div class="dynamic-inputs" id="keySuccessInputs">
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="อันดับ 1: ....................................................."><button class="add-btn" onclick="addDynamicInput('keySuccessInputs',5,'อันดับ')">+</button></div>
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="อันดับ 2: ....................................................."><button class="remove-btn" onclick="removeDynamicInput(this)">×</button></div>
+        </div>
+    </div>
+    <div class="question">
+        <label class="question-label">D2. ข้อเสนอแนะเชิงสร้างสรรค์ (Creativity)</label>
+        <p class="question-sublabel">รบกวนเสนอแนะ หรือแนวคิดอะไรก็ได้ ที่ท่านต้องการนำเสนอ เพื่อให้มีเครื่องมือหรือตัวช่วยในการทำงาน โดยไม่จำกัดขอบเขต</p>
+        <div class="dynamic-inputs" id="creativityInputs">
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="ข้อเสนอแนะที่ 1: ....................................................."><button class="add-btn" onclick="addDynamicInput('creativityInputs',5,'ข้อเสนอแนะที่')">+</button></div>
+            <div class="dynamic-input-row"><input type="text" class="dotted-input" placeholder="ข้อเสนอแนะที่ 2: ....................................................."><button class="remove-btn" onclick="removeDynamicInput(this)">×</button></div>
+        </div>
+    </div>
+    <div class="question"><label class="question-label">D3. ข้อกังวลหรือคำถามเกี่ยวกับการใช้ AI</label><textarea id="concerns" placeholder="ระบุข้อกังวลหรือคำถาม..."></textarea></div>
+</div>
+</div>
+
+<!-- ═══════════════ STEP 5: Section E — ฟีเจอร์ AI (หัวใจของแบบสอบถาม) ═══════════════ -->
+<div class="step" data-step="5" style="display:none">
+<div class="quoted-banner">
+    <h3>💎 ส่วนหลัก — ฟีเจอร์ AI ที่สนใจ (หัวใจของแบบสอบถาม)</h3>
+    <p>เลือกได้หลายข้อ &nbsp;|&nbsp; หมายเหตุ: <strong>[M]</strong>=เสียงประชุม, <strong>[S]</strong>=สไลด์นำเสนอ (4 มี.ค. 69), <strong>[Q]</strong>=Quoted (รอบแรก)</p>
+    <p style="margin-top:6px;"><span class="blue-dot"></span><strong>ฟีเจอร์สีน้ำเงิน</strong> = ฟีเจอร์ที่ลูกค้ายืนยันในรอบแรกของ Quotation แล้ว (รวม 3 ฟีเจอร์ — Face Check-in, Patrol Report, Application Form)</p>
+</div>
+<div class="section">
+    <div class="section-header"><div class="section-letter">E</div><div class="section-title">ฟีเจอร์ AI ที่สนใจ</div><span class="section-subtitle">Feature-Only · เลือกได้หลายข้อ</span></div>
+    <div class="question" id="gQuestion">
+        <div id="gCategories"></div>
+    </div>
+</div>
+</div>
+
+<!-- ═══════════════ SUCCESS ═══════════════ -->
+<div class="step" data-step="6" style="display:none">
+<div class="section success-page">
+    <div class="success-icon">✓</div>
+    <h2>ขอบคุณที่สละเวลาตอบแบบสอบถามค่ะ</h2>
+    <p>เราจะนำข้อมูลไปใช้ออกแบบระบบ AI คล้าย ERP สำหรับ <strong>บริษัท อิง เลง (ไทยแลนด์) จำกัด</strong><br>โดยมีเป้าหมาย Launch เดือนกรกฎาคม 2570 (Feature ที่เสร็จก่อนสามารถทยอยติดตั้งได้)</p>
+    <button class="nav-btn next" onclick="resetSurvey()">เริ่มใหม่</button>
+</div>
+</div>
+
+        <div class="nav-buttons" id="navButtons">
+            <button class="nav-btn prev" onclick="prevStep()" id="prevBtn" style="visibility:hidden">← ย้อนกลับ</button>
+            <button class="nav-btn next" onclick="nextStep()" id="nextBtn">ถัดไป →</button>
+        </div>
+    </div>
+    <div class="footer"><strong>ONE SEVEN DISCOVERY Co., Ltd.</strong> x <strong>บริษัท อิง เลง (ไทยแลนด์) จำกัด</strong> | Connected to Google Sheets</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgo-EdWhhdqGWBFohtZ1D4xuDo7OAmujBPwK0CqRZdqLEc80mZgRmR-9BopjcFCPSFqA/exec';
+let currentStep = 1;
+const totalSteps = 5;
+let selectedDepartment = '';
+
+// ═══════════════════════════════════════════════════════════════
+// SMART FILTER MAPPING
+// ═══════════════════════════════════════════════════════════════
+const DEPT_TAGS = {
+    'mgmt':'_ALL_','op':'Operation','hr':'HR','payroll':'Payroll',
+    'sales':'Sales','procurement':'จัดซื้อ','accounting':'บัญชี',
+    'stock':'Stock','qa':'QA','it':'_ALL_','training':'Training','admin':'Admin',
+    'janitor':'FieldWork','room':'FieldWork','steward':'FieldWork',
+    'table':'FieldWork','public':'FieldWork','other':'_ALL_'
+};
+
+// ═══════════════════════════════════════════════════════════════
+// DATA: B1 Categories (EngLeng — 9 categories, Feature-Only context)
+// ═══════════════════════════════════════════════════════════════
+const B1_DATA = [
+    { icon:'👥', label:'งาน HR / ทรัพยากรบุคคล', filter:['HR','Admin','Payroll','Training'], items:[
+        'สรรหาและคัดเลือกพนักงาน (รับใบสมัครกระดาษ / กรอกข้อมูลเข้า Excel)',
+        'เทียบคุณสมบัติผู้สมัครกับ Job Spec',
+        'สัมภาษณ์ / นัดสัมภาษณ์ผู้สมัคร',
+        'จัดทำสัญญาจ้างงาน',
+        'ตอบคำถาม HR พื้นฐาน (สวัสดิการ, ลา, เบิกจ่าย)',
+        'ดูแลพนักงานใหม่ (Onboarding)',
+        'จัดการแรงงานต่างด้าว (เมียนมา)']},
+    { icon:'⏰', label:'งาน Payroll / บัญชีเงินเดือน', filter:['HR','Payroll','Admin'], items:[
+        'เก็บ Time Sheet จากพนักงานในไซต์ (สายตรวจเก็บทุก 15 วัน)',
+        'ถ่ายรูป / สแกน Time Sheet ส่งเข้า Drive',
+        'คีย์ข้อมูล Time Sheet เข้า Excel (1 แอดมินดูแล 700-800 คน)',
+        'คำนวณ OT / ค่าตำแหน่ง / เบี้ยขยัน',
+        'คำนวณค่าน้ำมัน / ค่าเดินทาง',
+        'จัดทำสลิปเงินเดือน',
+        'อัปโหลดข้อมูลส่งธนาคารเพื่อจ่ายเงินเดือน']},
+    { icon:'📍', label:'งาน Operation / สายตรวจ / หัวหน้าไซต์', filter:['Operation','QA'], items:[
+        'เดินตรวจงาน / Patrol ตามไซต์ต่างๆ',
+        'ถ่ายรูปบันทึกการตรวจงาน',
+        'สรุปผลการตรวจ (Patrol Report) ส่งผู้จัดการ',
+        'ตรวจนับจำนวนพนักงานเข้างาน',
+        'จัดตารางกะ (Shift Schedule)',
+        'จัดการพนักงานลาป่วย / ลากิจ (สลับกะ)',
+        'ติดตามคุณภาพงานทำความสะอาดตามมาตรฐาน',
+        'ประสานงานกับนิติบุคคล / ผู้จัดการอาคาร']},
+    { icon:'🧹', label:'งานภาคสนาม — ทำความสะอาดและบริการ', filter:['FieldWork'], items:[
+        'ทำความสะอาดอาคาร / สำนักงาน / โกดัง / โรงงาน (Janitor Services)',
+        'ดูแลห้องพักโรงแรม / ปูเตียง (Room Attendant)',
+        'ล้างจาน / จัดการครัว (Steward Service)',
+        'ดูแลโต๊ะในร้านอาหาร / บริการ (Table Service)',
+        'ทำความสะอาดพื้นที่ส่วนกลาง (Public Area)',
+        'ทำความสะอาดใหญ่ (Big Cleaning)',
+        'ฉีดพ่นฆ่าเชื้อ (Disinfection Service)',
+        'เช็คอิน / เช็คเอาท์ผ่านการลงชื่อกระดาษ / เซ็นชื่อ',
+        'ตอบคำขอร้องของลูกค้าในไซต์']},
+    { icon:'💼', label:'งาน Sales / ฝ่ายขาย', filter:['Sales'], items:[
+        'ติดต่อลูกค้าใหม่ / Business Development',
+        'จัดทำใบเสนอราคา (Quotation)',
+        'ส่งใบเสนอราคาเป็น PDF / เอกสาร',
+        'ติดตามสัญญา / ต่อสัญญา',
+        'จัดการสัญญาเดิม 190+ แห่ง',
+        'วิเคราะห์คู่แข่ง / Price War',
+        'ดูแลลูกค้าเก่า / Key Account']},
+    { icon:'🛒', label:'งานจัดซื้อ / Procurement', filter:['จัดซื้อ','Stock'], items:[
+        'เปรียบเทียบราคาจาก Vendor หลายเจ้า',
+        'สั่งซื้อวัสดุสิ้นเปลือง (ทิชชู่, ถุงขยะ, น้ำยา ฯลฯ)',
+        'สั่งซื้ออุปกรณ์ (เครื่องขัดพื้น, เครื่องดูดฝุ่น)',
+        'สร้างใบ PO',
+        'ประเมิน / ให้คะแนน Vendor',
+        'ติดตามสถานะการสั่งซื้อ']},
+    { icon:'💰', label:'งานบัญชี / การเงิน', filter:['บัญชี'], items:[
+        'กรอกข้อมูลเข้าระบบ Express Accounting',
+        'บันทึกรายรับ - รายจ่าย / ใบเสร็จ',
+        'จับคู่ Bank Statement กับใบเสร็จ',
+        'ตรวจสอบเอกสารเบิกจ่าย',
+        'จัดทำรายงานการเงิน',
+        'ออกใบกำกับภาษี / ใบเสร็จ']},
+    { icon:'📦', label:'งาน Stock / คลังวัสดุ-อุปกรณ์', filter:['Stock','จัดซื้อ','Operation'], items:[
+        'รับ - จ่ายวัสดุสิ้นเปลืองให้ไซต์',
+        'นับสต็อกวัสดุ / อุปกรณ์',
+        'ติดตามอุปกรณ์ว่าใครถืออยู่ไซต์ไหน (เครื่องขัดพื้น, เครื่องดูดฝุ่น)',
+        'เบิกวัสดุจากไซต์ / อนุมัติเบิก',
+        'ดูแลเครื่องขัดพื้น / เครื่องดูดฝุ่นข้ามไซต์']},
+    { icon:'📋', label:'งานเอกสารและการบริหาร', filter:'_SHARED_', items:[
+        'จัดทำรายงานประจำวัน / สัปดาห์',
+        'สรุปการประชุม / บันทึกข้อตกลง',
+        'ติดตามเอกสารที่ยังไม่ครบ',
+        'ประสานงานระหว่างแผนก',
+        'ตอบคำถามผ่าน LINE',
+        'จัดการอนุมัติเอกสาร',
+        'จัดเก็บ / ค้นหาเอกสาร (95% เป็น Excel)',
+        'กรอกข้อมูลซ้ำจากระบบหนึ่งไปอีกระบบ']}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// DATA: C1 Categories (EngLeng — 6 problem categories)
+// ═══════════════════════════════════════════════════════════════
+const C1_DATA = [
+    { icon:'📄', label:'ปัญหาเอกสารและงานซ้ำซ้อน', filter:'_SHARED_', items:[
+        'ต้องกรอกข้อมูลซ้ำๆ ในหลายระบบ / หลาย Excel',
+        'ระบบหลังบ้านเป็น Manual ประมาณ 95% / ใช้ Excel เป็นหลัก',
+        'Time Sheet ยังเป็นกระดาษ ต้องมีคนเก็บและคีย์ใส่ Excel',
+        'ใบสมัครงานต้องกรอกเอกสารหลายใบ ใช้เวลามาก',
+        'ติดตามเอกสารค้างยาก ไม่มีระบบแจ้งเตือน',
+        'อ่านลายมือในเอกสารไม่ออก / ลายมือไม่ชัด',
+        'เอกสารจากหน้าไซต์ส่งไม่ครบ / ไม่ทันเวลา',
+        'ไม่มีระบบ One Single Key — ต้อง Input ซ้ำหลายที่']},
+    { icon:'👥', label:'ปัญหาการบริหารพนักงานและการลงเวลา', filter:['HR','Payroll','Operation'], items:[
+        'พนักงาน Turnover สูง (100-200% ต่อปี)',
+        'ลงเวลาด้วยการเซ็นชื่อกระดาษ / ตอกบัตร',
+        'ตรวจสอบยากว่าพนักงานมาถึงไซต์จริงหรือไม่',
+        'จัดตารางกะด้วย Excel ใช้เวลา 2-3 ชั่วโมง',
+        'พนักงานลาป่วย ต้องสลับกะด่วน หาคนแทนไม่ทัน',
+        'แอดมิน 1 คนดูแลพนักงาน 700-800 คน ภาระหนัก',
+        'แรงงานต่างด้าว (เมียนมา) มีอุปสรรคด้านภาษา']},
+    { icon:'🔍', label:'ปัญหาการตรวจงานและคุณภาพ', filter:['Operation','QA'], items:[
+        'สายตรวจเดินตรวจต้องเขียนสรุปรายงานเอง ใช้เวลานาน',
+        'ไม่มีหลักฐานพิสูจน์คุณภาพงาน (ภาพ Before/After)',
+        'ตรวจสอบคุณภาพแบบ Manual (ลูกค้าร้องเรียนก่อนจึงรู้)',
+        'ขาด Real-time Data จากหน้าไซต์',
+        'วัสดุสิ้นเปลืองหมดกลางวันโดยไม่รู้ล่วงหน้า',
+        'ลูกค้าไม่มี Customer Portal ต้องแจ้งผ่านโทร / LINE ส่วนตัว']},
+    { icon:'💼', label:'ปัญหาการขาย / การเสนอราคา', filter:['Sales'], items:[
+        'ใช้เวลาออกใบเสนอราคานาน',
+        'Price War — คู่แข่งตัดราคา ลูกค้ามองไม่เห็นความต่าง',
+        'ขาดเครื่องมือโชว์ผลงานจริงให้ลูกค้าใหม่',
+        'การปิดดีลต้องส่ง PDF ไปมาหลายครั้ง']},
+    { icon:'🛒', label:'ปัญหาการจัดซื้อและจัดการ Vendor', filter:['จัดซื้อ'], items:[
+        'ไม่มีระบบเปรียบเทียบราคาจาก Vendor หลายเจ้า',
+        'ไม่มี Template การสั่งซื้อรายเดือน',
+        'ไม่มี Auto Workflow อนุมัติ',
+        'สั่งของตามความรู้สึก (ไม่มีข้อมูลประวัติย้อนหลัง)']},
+    { icon:'💰', label:'ปัญหาระบบบัญชี / การเงิน', filter:['บัญชี','Payroll'], items:[
+        'Express Accounting ไม่เชื่อมกับระบบอื่น',
+        'Margin บาง (Gross 14%, Net 2.3%) — ต้องการข้อมูลใกล้ชิด',
+        'Cash Flow ตึงตัว (ลูกค้าเครดิต 30-60 วัน แต่จ่ายค่าแรงทุกเดือน)',
+        'รายงานล่าช้า ต้องทำมือผ่าน Excel']}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// DATA: G Categories → EngLeng Section E (Features — 8 categories, with 3 QUOTED in blue)
+// Item format: string = normal, object = {text, quoted, qTag, detail, source}
+// ═══════════════════════════════════════════════════════════════
+const G_DATA = [
+    { icon:'👤', label:'AI ช่วยงาน HR และ Workforce Management', filter:['HR','Payroll','Operation','Admin'], items:[
+        { text:'AI Face Check-in — ลงเวลาสแกนใบหน้า + GPS + LINE', quoted:true, qTag:'Q: Feature 1',
+          detail:'รายละเอียด: Face Recognition ผ่าน LINE OA + LIFF เช็คอิน-เช็คเอาท์ พร้อม GPS Validation / Web Admin Dashboard (รายงานเข้างาน/ลา/สาย) / Scheduling Alert',
+          source:'[S: สไลด์หน้า 21-22 AI Workforce Management]' },
+        { text:'AI Auto Application Form — ใบสมัครอัตโนมัติ OCR ไทย/เมียนมา', quoted:true, qTag:'Q: Feature 3',
+          detail:'รายละเอียด: OCR เอกสารไทย/เมียนมา → JSON → สร้างสัญญาจ้างอัตโนมัติ / Bot รับรูปเอกสาร + Multi-step Preview / Web Admin รีวิว-อนุมัติ-ดาวน์โหลดสัญญา',
+          source:'[M: คุณอิงเลงระบุว่าใบสมัครงานเป็นเอกสารที่ใช้เวลามากที่สุด]' },
+        { text:'AI Workforce Scheduling — จัดตารางกะอัตโนมัติ (ใคร / ทำอะไร / ที่ไหน / เมื่อไหร่)',
+          source:'[S: สไลด์หน้า 21-22 — ลดเวลาจัดกะ 80%]' },
+        { text:'AI Auto-Swap กะ — สลับกะอัตโนมัติเมื่อพนักงานลาป่วย ผู้บริหารแค่กดอนุมัติ',
+          source:'[S: สไลด์หน้า 21]' },
+        { text:'AI Affiliate Recruitment — แม่บ้านกดแชร์ประกาศ → รับโบนัสแนะนำเพื่อน',
+          source:'[S: สไลด์หน้า 31 — ลดต้นทุนสรรหา 30-50%]' },
+        { text:'HR / Payroll Dashboard — คำนวณ OT / ค่าตำแหน่ง / ค่าน้ำมันอัตโนมัติ + Export CSV ส่งธนาคาร',
+          source:'[S: สไลด์หน้า 32 — ลดภาระ HR 60-70%]' },
+        { text:'สลิปเงินเดือนผ่าน LINE — พนักงานดูเองได้ ไม่ต้องถาม HR',
+          source:'[S: สไลด์หน้า 32]' },
+        { text:'AI Onboarding — ระบบช่วยดูแลพนักงานใหม่ 3 เดือนแรก' },
+        { text:'AI Training Module — วิดีโออบรมภาษาเมียนมา + Quiz + Video Completion Tracking',
+          source:'[S: สไลด์หน้า 28 — ลด Training Cost 50-60%]' }
+    ]},
+    { icon:'📍', label:'AI ช่วยงาน Operation และสายตรวจ', filter:['Operation','QA'], items:[
+        { text:'AI Patrol Report — สายตรวจถ่ายรูป AI สรุป', quoted:true, qTag:'Q: Feature 2',
+          detail:'รายละเอียด: สายตรวจถ่ายรูป → OCR + Vision + Face Matching + Summary อัตโนมัติ / Bot รับรูปหลายใบ + ส่งสรุป / Web Admin ดู Patrol Report',
+          source:'[M: ตอบโจทย์งานสายตรวจที่ต้องเขียนสรุปรายงานเอง]' },
+        { text:'VOC Onsite — พนักงานถ่ายรูป Before / After ทุกจุด + Timestamp + GPS + Auto-Report',
+          source:'[S: สไลด์หน้า 20]' },
+        { text:'Consolidate Chat — รวมแชททุกช่องทาง (LINE OA หลายบัญชี) ไว้ใน Web Admin เดียว พร้อม SLA Tracking + Audit Trail',
+          source:'[S: สไลด์หน้า 19]' },
+        { text:'AI Chatbot + VOC — ลูกค้าแจ้งปัญหาผ่าน LINE → AI Route งานให้แม่บ้านที่รับผิดชอบ',
+          source:'[S: สไลด์หน้า 18 — Response Time ลดจาก 2-4 ชม. เหลือ 5-15 นาที]' },
+        { text:'Camera AI / Computer Vision — ใช้กล้อง CCTV เดิม + AI Software ตรวจจับคราบสิ่งสกปรก → Alert แม่บ้าน',
+          source:'[S: สไลด์หน้า 26 | M: รอบริษัทแม่สิงคโปร์ Approve ก่อน]' },
+        { text:'IoT Sensor — นับคนเข้าห้องน้ำ / เซ็นเซอร์ถังขยะ / คุณภาพอากาศและความชื้น',
+          source:'[S: สไลด์หน้า 27]' }
+    ]},
+    { icon:'📄', label:'AI ช่วยงานเอกสาร (Document Flow Automation — One Single Key)', filter:'_SHARED_', items:[
+        { text:'AI Time Sheet OCR — สแกน Time Sheet กระดาษ → แปลงเป็น Excel อัตโนมัติ',
+          source:'[M: คุณอิงเลงระบุว่าเป็น Priority ที่ 1 — ลดภาระสายตรวจและแอดมิน]' },
+        { text:'AI Document Flow — OCR เอกสารทุกรูปแบบ → JSON → กรอกแบบฟอร์มให้อัตโนมัติ',
+          source:'[M: คอนเซ็ปต์ One Single Key — Input ครั้งเดียว ไหลไปทุกฝ่าย]' },
+        { text:'AI Escalation Workflow — เช่น OT เกิน 30% ส่ง Approve ขึ้น Manager อัตโนมัติ',
+          source:'[M: ตัวอย่างเคสที่พี่ใหญ่นำเสนอ]' },
+        { text:'AI Auto Summary — รวมใบเบิก 12 ใบ → ใบสรุปเดียวให้บัญชีอัตโนมัติ',
+          source:'[M: ตัวอย่างเคสที่พี่ใหญ่นำเสนอ]' },
+        { text:'AI Document Dispatch — ส่งต่อเอกสารระหว่างแผนกอัตโนมัติ',
+          source:'[S: สไลด์หน้า 19]' },
+        { text:'AI OCR ลายมือ — อ่านลายมือในเอกสารไทย / เมียนมา',
+          source:'[M: ลูกค้าถามเรื่องลายมือในที่ประชุม]' }
+    ]},
+    { icon:'💼', label:'AI ช่วยงาน Sales (ตามที่ลูกค้าขอเพิ่ม ERP Scope)', filter:['Sales'], items:[
+        { text:'Sales Auto-Form — ทำเอกสารผ่านฟอร์มในระบบได้ทันที',
+          source:'[M: x3.1 ลูกค้าระบุโดยตรง]' },
+        { text:'Smart Form Voice → Quotation — พูดข้อมูลอาคาร → AI สร้างใบเสนอราคา ส่งทาง LINE',
+          source:'[S: สไลด์หน้า 25]' },
+        { text:'AI Sales Dashboard — โชว์คะแนน Real-time + Complaint Trend ให้ลูกค้าใหม่ดู (สู้ Price War)',
+          source:'[S: สไลด์หน้า 25 — Win Rate เพิ่ม 20-30%]' },
+        { text:'AI CRM — ฐานข้อมูลลูกค้า 190+ แห่ง + ประวัติการติดต่อ' },
+        { text:'AI Churn Prediction — พยากรณ์ลูกค้าที่มีแนวโน้มยกเลิกสัญญา 30-60 วันล่วงหน้า',
+          source:'[S: สไลด์หน้า 24 — Insight Report]' }
+    ]},
+    { icon:'🛒', label:'AI ช่วยงานจัดซื้อ / Procurement (ตามที่ลูกค้าขอเพิ่ม ERP Scope)', filter:['จัดซื้อ','Stock'], items:[
+        { text:'Vendor Comparison — เลือก Vendor + เปรียบเทียบราคาอัตโนมัติ',
+          source:'[M: x3.2 ลูกค้าระบุโดยตรง]' },
+        { text:'Monthly PO Template — ตั้ง Template การสั่งซื้อรายเดือน',
+          source:'[M: x3.2 ลูกค้าระบุโดยตรง]' },
+        { text:'Auto Workflow จัดซื้อ — ส่ง Workflow ต่ออัตโนมัติระหว่างแผนก',
+          source:'[M: x3.2 ลูกค้าระบุโดยตรง]' },
+        { text:'AI Vendor Scoring — ให้คะแนน Vendor (ราคา / คุณภาพ / ส่งตรงเวลา)' },
+        { text:'AI Anomaly Detection จัดซื้อ — แจ้งเตือนเมื่อราคา / ปริมาณผิดปกติ' }
+    ]},
+    { icon:'💰', label:'AI ช่วยงานบัญชี / การเงิน (ตามที่ลูกค้าขอเพิ่ม ERP Scope)', filter:['บัญชี'], items:[
+        { text:'เชื่อมกับ Express Accounting Software — รวมฟังก์ชันเข้าระบบใหม่ให้ใช้งานง่ายกว่าเดิม',
+          source:'[M: x3.3 ลูกค้าระบุโดยตรง]' },
+        { text:'AI Auto Reconciliation — จับคู่ Bank Statement กับใบเสร็จอัตโนมัติ' },
+        { text:'AI Cash Flow Dashboard — พยากรณ์กระแสเงินสด (ลูกค้าเครดิต 30-60 วัน vs ค่าแรงรายเดือน)' },
+        { text:'AI Invoice Matching — ตรวจสอบใบแจ้งหนี้ ↔ PO ↔ GRN อัตโนมัติ' }
+    ]},
+    { icon:'📦', label:'AI ช่วยงาน Stock / คลังวัสดุ-อุปกรณ์', filter:['Stock','จัดซื้อ'], items:[
+        { text:'AI Inventory — ตรวจจับการใช้วัสดุผิดปกติ (เช่น ตึก ABC ใช้ทิชชู่เกิน 60% เทียบกับตึกขนาดเดียวกัน)',
+          source:'[S: สไลด์หน้า 29-30 — ลดต้นทุนวัสดุ 15-25%]' },
+        { text:'เบิกวัสดุผ่าน LINE — พนักงานขอเบิก + หัวหน้าอนุมัติ + ระบบตัดสต็อกอัตโนมัติ',
+          source:'[S: สไลด์หน้า 30]' },
+        { text:'Stock Alert + Reorder Point — แจ้งเตือนเมื่อสต็อกต่ำกว่าจุดสั่งซื้อ' },
+        { text:'ติดตามอุปกรณ์ (Audit Log) — ใครถือเครื่องขัดพื้น / เครื่องดูดฝุ่น อยู่ไซต์ไหน ป้องกันการสูญหาย',
+          source:'[S: สไลด์หน้า 30]' }
+    ]},
+    { icon:'📊', label:'AI ช่วย Dashboard และรายงาน', filter:'_SHARED_', items:[
+        { text:'Customer Dashboard — ลูกค้าเปิดดูคะแนนความสะอาด Real-time + Before/After Gallery + Export PDF',
+          source:'[S: สไลด์หน้า 23]' },
+        { text:'Management Dashboard — ผู้บริหารดูภาพรวมทุกอาคาร + Workforce Stat + KPI อัตโนมัติ',
+          source:'[S: สไลด์หน้า 23-24]' },
+        { text:'Insight Report — วิเคราะห์ประสิทธิภาพพนักงาน (Top-Bottom Ranking จาก Check-in + คุณภาพงาน)',
+          source:'[S: สไลด์หน้า 24 — Workforce Efficiency]' },
+        { text:'Insight Report — วิเคราะห์กำไร - ขาดทุนแต่ละไซต์',
+          source:'[S: สไลด์หน้า 24 — Site Profitability]' },
+        { text:'Insight Report — วิเคราะห์ Turnover Pattern + แนะนำวิธีลดการลาออก (ลด Turnover 20-30%)',
+          source:'[S: สไลด์หน้า 24 — Retention Optimizer]' },
+        { text:'Auto-Report — Export PDF ส่งรายงานให้นิติบุคคลอัตโนมัติ' }
+    ]}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// BUILD FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function buildCollapsibleCategories(data, containerId, useSmartFilter, useE2Grid) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    data.forEach((cat, idx) => {
+        const div = document.createElement('div');
+        div.className = 'collapsible-category';
+        if (useSmartFilter) {
+            div.dataset.filter = cat.filter === '_SHARED_' ? '_SHARED_' : JSON.stringify(cat.filter);
+        }
+        let bodyHTML = '';
+        if (cat.subGroups) {
+            cat.subGroups.forEach(sg => {
+                bodyHTML += `<div class="sub-group-title">— ${sg.title} —</div><div class="checkbox-grid">`;
+                sg.items.forEach(item => {
+                    bodyHTML += `<label class="option checkbox" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">${item}</span></label>`;
+                });
+                bodyHTML += `</div>`;
+            });
+            bodyHTML += `<div class="checkbox-grid" style="margin-top:8px"><label class="option checkbox has-input" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">อื่นๆ...</span><input type="text" class="other-input" placeholder="ระบุ..." onclick="event.stopPropagation()"></label></div>`;
+        } else {
+            bodyHTML = '<div class="checkbox-grid">';
+            cat.items.forEach(item => {
+                if (typeof item === 'string') {
+                    bodyHTML += `<label class="option checkbox" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">${item}</span></label>`;
+                } else {
+                    // Object: {text, quoted, qTag, detail, source}
+                    const quotedCls = item.quoted ? ' quoted' : '';
+                    const qTagHtml = item.qTag ? `<span class="q-tag">${item.qTag}</span>` : '';
+                    const detailHtml = item.detail ? `<span class="feature-detail">${item.detail}</span>` : '';
+                    const sourceHtml = item.source ? `<span class="source-tag">${item.source}</span>` : '';
+                    const prefix = item.quoted ? '🔵 ' : '';
+                    bodyHTML += `<label class="option checkbox${quotedCls}" style="grid-column:1/-1" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">${prefix}${item.text}${qTagHtml}${detailHtml}${sourceHtml}</span></label>`;
+                }
+            });
+            bodyHTML += `<label class="option checkbox has-input" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">อื่นๆ...</span><input type="text" class="other-input" placeholder="ระบุ..." onclick="event.stopPropagation()"></label></div>`;
+        }
+        div.innerHTML = `
+            <div class="collapsible-header" onclick="toggleCollapsible(this${useE2Grid ? ',true' : ''})">
+                <span class="arrow">▶</span>
+                <span class="cat-icon">${cat.icon}</span>
+                <span class="cat-label">${cat.label}</span>
+                <span class="cat-count">0 เลือก</span>
+                ${useSmartFilter ? '<span class="click-hint">คลิก</span>' : ''}
+            </div>
+            <div class="collapsible-body">${bodyHTML}</div>`;
+        container.appendChild(div);
+    });
+    if (useE2Grid) {
+        // Wrap categories in 2-column grid
+        const wrapper = document.createElement('div');
+        wrapper.className = 'e2-grid';
+        while (container.firstChild) wrapper.appendChild(container.firstChild);
+        container.appendChild(wrapper);
+    }
+}
+
+function buildF1() {
+    const grid = document.getElementById('f1RatingGrid');
+    grid.innerHTML = '';
+    grid.className = 'f1-compact-grid';
+    F1_DATA.forEach(label => {
+        const row = document.createElement('div');
+        row.className = 'f1-compact-row';
+        row.innerHTML = `<span class="f1-compact-label">${label}</span><div class="f1-compact-btns">${[1,2,3,4,5].map(n=>`<button class="f1-compact-btn" onclick="selectRating(this)">${n}</button>`).join('')}</div>`;
+        grid.appendChild(row);
+    });
+    const otherRow = document.createElement('div');
+    otherRow.className = 'f1-compact-row';
+    otherRow.id = 'expectationOtherRow';
+    otherRow.style.gridColumn = '1 / -1';
+    otherRow.innerHTML = `<div class="f1-compact-label" style="display:flex;align-items:center;gap:6px"><span>อื่นๆ</span><input type="text" id="expectationOtherText" class="dotted-input" placeholder="โปรดระบุ..." style="flex:1;min-width:80px;font-size:0.75rem"></div><div class="f1-compact-btns">${[1,2,3,4,5].map(n=>`<button class="f1-compact-btn" onclick="selectRating(this)">${n}</button>`).join('')}</div>`;
+    grid.appendChild(otherRow);
+}
+
+function buildF2() {
+    const grid = document.getElementById('f2Grid');
+    grid.innerHTML = '';
+    F2_DATA.forEach(topic => {
+        grid.innerHTML += `<label class="option checkbox" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">${topic}</span></label>`;
+    });
+    grid.innerHTML += `<label class="option checkbox has-input" onclick="toggleCheckbox(this)"><span class="checkmark"></span><span class="option-title">อื่นๆ...</span><input type="text" class="other-input" placeholder="ระบุ..." onclick="event.stopPropagation()"></label>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SMART FILTER
+// ═══════════════════════════════════════════════════════════════
+function applySmartFilter() {
+    const tag = DEPT_TAGS[selectedDepartment] || '_ALL_';
+    document.querySelectorAll('.collapsible-category[data-filter]').forEach(cat => {
+        // V5: Clear all filter classes first
+        cat.classList.remove('dept-relevant', 'filter-dimmed', 'filter-locked');
+
+        // IT, ผู้บริหาร, อื่นๆ = _ALL_ → เห็นทุกหมวดปกติ ไม่จาง ไม่เรียงพิเศษ
+        if (tag === '_ALL_') return;
+
+        const filterData = cat.dataset.filter;
+        let isRelevant = false;
+        if (filterData === '_SHARED_') {
+            isRelevant = true;
+        } else {
+            try {
+                const tags = JSON.parse(filterData);
+                isRelevant = tags.includes(tag);
+            } catch(e) { isRelevant = true; }
+        }
+
+        if (isRelevant) {
+            // V5: แถบตรงแผนก → ชัด + ตีกรอบ + เลื่อนขึ้นบน
+            cat.classList.add('dept-relevant');
+        } else {
+            // V5: แถบไม่ตรงแผนก → จางแต่ยังกดได้ (ไม่ lock)
+            cat.classList.add('filter-dimmed');
+            // ยุบ dropdown (แต่ไม่ล้าง selection — กดเปิดเองได้)
+            const body = cat.querySelector('.collapsible-body');
+            const arrow = cat.querySelector('.arrow');
+            if (body) body.classList.remove('open');
+            if (arrow) arrow.classList.remove('open');
+        }
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COLLAPSIBLE TOGGLE
+// ═══════════════════════════════════════════════════════════════
+function toggleCollapsible(header, accordion) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('.arrow');
+    const isOpen = body.classList.contains('open');
+    // Accordion mode: close all siblings first
+    if (accordion && !isOpen) {
+        const parent = header.closest('.e2-grid') || header.closest('.collapsible-category').parentElement;
+        if (parent) {
+            parent.querySelectorAll('.collapsible-body.open').forEach(b => {
+                b.classList.remove('open');
+                const a = b.previousElementSibling.querySelector('.arrow');
+                if (a) a.classList.remove('open');
+            });
+        }
+    }
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+}
+
+function updateCatCount(cat) {
+    const count = cat.querySelectorAll('.option.checkbox.selected').length;
+    const badge = cat.querySelector('.cat-count');
+    if (badge) badge.textContent = count + ' เลือก';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function updateStepIndicator() {
+    const ind = document.getElementById('stepIndicator');
+    ind.innerHTML = '';
+    for (let i = 1; i <= totalSteps; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'step-dot';
+        if (i < currentStep) dot.classList.add('completed');
+        if (i === currentStep) dot.classList.add('active');
+        ind.appendChild(dot);
+    }
+}
+function updateProgress() {
+    document.getElementById('progressBar').style.width = ((currentStep-1)/totalSteps*100)+'%';
+}
+function showStep(step) {
+    document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+    const el = document.querySelector(`.step[data-step="${step}"]`);
+    if (el) el.style.display = 'block';
+    document.getElementById('prevBtn').style.visibility = step === 1 ? 'hidden' : 'visible';
+    if (step === totalSteps) { document.getElementById('nextBtn').textContent = 'ส่ง ✓'; }
+    else if (step > totalSteps) { document.getElementById('navButtons').style.display = 'none'; }
+    else { document.getElementById('nextBtn').textContent = 'ถัดไป →'; }
+}
+function nextStep() {
+    if (currentStep === totalSteps) {
+        // V5: Confirm dialog before submit
+        if (confirm('ยืนยันการส่งแบบสอบถาม?\n\nกด OK เพื่อส่ง หรือ Cancel เพื่อกลับไปตรวจสอบ')) {
+            submitSurvey();
+        }
+    }
+    else if (currentStep < totalSteps) { currentStep++; showStep(currentStep); updateStepIndicator(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function prevStep() {
+    if (currentStep > 1) { currentStep--; showStep(currentStep); updateStepIndicator(); updateProgress(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SELECTION HANDLERS
+// ═══════════════════════════════════════════════════════════════
+function selectDept(el, val) {
+    document.querySelectorAll('[name="department"]').forEach(inp => inp.closest('.option').classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input[type="radio"]').checked = true;
+    selectedDepartment = val;
+    applySmartFilter();
+    if (val === 'other') setTimeout(() => document.getElementById('deptOtherInput').focus(), 100);
+}
+function selectOption(el, name) {
+    document.querySelectorAll(`[name="${name}"]`).forEach(inp => inp.closest('.option').classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input[type="radio"]').checked = true;
+}
+function selectLevel(el) {
+    document.querySelectorAll('.level-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+}
+function toggleCheckbox(el) {
+    el.classList.toggle('selected');
+    if (el.classList.contains('has-input')) {
+        const inp = el.querySelector('.other-input');
+        if (el.classList.contains('selected') && inp) setTimeout(()=>inp.focus(),50);
+        else if (inp) inp.value = '';
+    }
+    const cat = el.closest('.collapsible-category');
+    if (cat) updateCatCount(cat);
+}
+function selectRating(btn) {
+    const row = btn.closest('.rating-row') || btn.closest('.f1-compact-row');
+    const was = btn.classList.contains('selected');
+    row.querySelectorAll('.rating-btn,.f1-compact-btn').forEach(b => b.classList.remove('selected'));
+    if (!was) btn.classList.add('selected');
+}
+function selectFreq(el) {
+    document.querySelectorAll('.freq-option:not(.other-tool)').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+}
+function toggleOtherTool(el, cat) {
+    el.classList.toggle('selected');
+    const inp = document.getElementById(cat+'-other');
+    if (el.classList.contains('selected')) { inp.classList.add('show'); inp.focus(); }
+    else { inp.classList.remove('show'); inp.value = ''; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DYNAMIC INPUTS
+// ═══════════════════════════════════════════════════════════════
+function addDynamicInput(id, max, prefix) {
+    const c = document.getElementById(id);
+    const rows = c.querySelectorAll('.dynamic-input-row');
+    if (rows.length < max) {
+        const n = rows.length + 1;
+        const r = document.createElement('div');
+        r.className = 'dynamic-input-row';
+        r.innerHTML = `<input type="text" class="dotted-input" placeholder="${prefix} ${n}: ....................................................."><button class="remove-btn" onclick="removeDynamicInput(this)">×</button>`;
+        c.appendChild(r);
+    }
+}
+function removeDynamicInput(btn) {
+    const c = btn.closest('.dynamic-inputs');
+    if (c.querySelectorAll('.dynamic-input-row').length > 1) btn.closest('.dynamic-input-row').remove();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DATA COLLECTION
+// ═══════════════════════════════════════════════════════════════
+function getChecked(container) {
+    if (!container) return [];
+    const items = [];
+    container.querySelectorAll('.option.checkbox.selected').forEach(el => {
+        const t = el.querySelector('.option-title');
+        const title = t ? t.textContent.trim() : '';
+        if (!title.startsWith('อื่นๆ')) { if (title) items.push(title); }
+        else { const o = el.querySelector('.other-input'); items.push(o && o.value.trim() ? 'อื่นๆ: '+o.value.trim() : 'อื่นๆ (ไม่ระบุ)'); }
+    });
+    return items;
+}
+function collectDynamic(id) {
+    const items = [];
+    document.querySelectorAll('#'+id+' input').forEach(i => { if (i.value.trim()) items.push(i.value.trim()); });
+    return items;
+}
+function collectCategoryData(containerId) {
+    const result = {};
+    document.querySelectorAll('#'+containerId+' .collapsible-category').forEach((cat, idx) => {
+        const label = cat.querySelector('.cat-label').textContent.trim();
+        result[label] = getChecked(cat);
+    });
+    return result;
+}
+function collectFormData() {
+    const name = document.getElementById('name').value.trim();
+    const position = document.getElementById('position').value.trim();
+    const deptR = document.querySelector('input[name="department"]:checked');
+    const department = deptR ? deptR.value : '';
+    const departmentOther = (document.getElementById('deptOtherInput') || {}).value || '';
+    const locR = document.querySelector('input[name="location"]:checked');
+    const location = locR ? locR.value : '';
+    const locationOther = (document.getElementById('locationOtherInput') || {}).value || '';
+
+    // B
+    const dailyWork = collectCategoryData('b1Categories');
+    const repeatWork = collectDynamic('repeatWorkInputs');
+
+    // C
+    const problems = collectCategoryData('c1Categories');
+    const painPoints = collectDynamic('painPointInputs');
+    const aiHelpTop3 = [document.getElementById('aiHelp1').value.trim(), document.getElementById('aiHelp2').value.trim(), document.getElementById('aiHelp3').value.trim()].filter(Boolean);
+
+    // D
+    const keySuccess = collectDynamic('keySuccessInputs');
+    const creativity = collectDynamic('creativityInputs');
+    const concerns = document.getElementById('concerns').value.trim();
+
+    // E (Features - heart of survey)
+    const interestedFeatures = collectCategoryData('gCategories');
+
+    return {
+        timestamp: new Date().toISOString(),
+        name, position, department, departmentOther, location, locationOther,
+        dailyWork, repeatWork,
+        problems, painPoints, aiHelpTop3,
+        keySuccess, creativity, concerns,
+        interestedFeatures
+    };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RESET / SUBMIT
+// ═══════════════════════════════════════════════════════════════
+function resetSurvey() {
+    currentStep = 1;
+    selectedDepartment = '';
+    document.getElementById('navButtons').style.display = 'flex';
+    document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+    document.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
+    document.querySelectorAll('textarea').forEach(t => t.value = '');
+    document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+    document.querySelectorAll('.other-tool-input').forEach(i => { i.classList.remove('show'); i.value=''; });
+    document.querySelectorAll('.collapsible-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.arrow').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.cat-count').forEach(c => c.textContent = '0 เลือก');
+    document.querySelectorAll('.collapsible-category').forEach(c => { c.classList.remove('filter-locked','filter-dimmed','dept-relevant'); });
+    showStep(1); updateStepIndicator(); updateProgress();
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function submitSurvey() {
+    const data = collectFormData();
+    if (!data.name) { alert('กรุณากรอกชื่อ-นามสกุล'); currentStep=1; showStep(1); updateStepIndicator(); updateProgress(); return; }
+    if (data.department==='other' && !data.departmentOther) { alert('กรุณาระบุแผนก'); document.getElementById('deptOtherInput').focus(); return; }
+    const btn = document.getElementById('nextBtn');
+    btn.disabled = true; btn.textContent = 'กำลังส่ง...';
+    try {
+        if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+            await fetch(GOOGLE_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+        }
+        console.log('Submitted:', data);
+        currentStep = totalSteps + 1;
+        showStep(currentStep); updateProgress();
+    } catch(err) {
+        console.error(err);
+        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+        btn.disabled = false; btn.textContent = 'ส่ง ✓';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+buildCollapsibleCategories(B1_DATA, 'b1Categories', true, false);
+buildCollapsibleCategories(C1_DATA, 'c1Categories', true, false);
+buildCollapsibleCategories(G_DATA, 'gCategories', true, false);
+showStep(1);
+updateStepIndicator();
+updateProgress();
+
+// Init other-input click handlers
+document.querySelectorAll('.option.has-input .other-input').forEach(inp => {
+    inp.addEventListener('click', e => e.stopPropagation());
+    inp.addEventListener('mousedown', e => e.stopPropagation());
+});
+
+// ═══════════════════════════════════════════════════════════════
+// V5: E2 SEARCH
+// ═══════════════════════════════════════════════════════════════
+function searchE2(query) {
+    const results = document.getElementById('e2SearchResults');
+    if (!query || query.length < 1) { results.classList.remove('show'); results.innerHTML = ''; return; }
+    const q = query.toLowerCase();
+    let html = '';
+    E2_DATA.forEach(cat => {
+        const allItems = cat.items || [];
+        allItems.forEach(item => {
+            if (item.toLowerCase().includes(q)) {
+                const isChecked = isE2ItemChecked(cat.label, item);
+                html += `<div class="e2-search-item ${isChecked?'checked':''}" onclick="toggleE2SearchItem(this,'${cat.label.replace(/'/g,"\\'")}','${item.replace(/'/g,"\\'")}')">
+                    <span class="cat-name">${cat.icon} ${cat.label}</span>
+                    <span class="item-name">${item}</span>
+                    <span class="item-check"></span>
+                </div>`;
+            }
+        });
+    });
+    if (html) { results.innerHTML = html; results.classList.add('show'); }
+    else { results.innerHTML = '<div style="padding:12px;text-align:center;color:#999;font-size:0.8rem">ไม่พบผลลัพธ์</div>'; results.classList.add('show'); }
+}
+
+function isE2ItemChecked(catLabel, itemText) {
+    const cats = document.querySelectorAll('#e2Categories .collapsible-category, #e2Categories .e2-grid .collapsible-category');
+    for (const cat of cats) {
+        const label = cat.querySelector('.cat-label');
+        if (label && label.textContent.trim() === catLabel) {
+            const opts = cat.querySelectorAll('.option.checkbox');
+            for (const opt of opts) {
+                const title = opt.querySelector('.option-title');
+                if (title && title.textContent.trim() === itemText && opt.classList.contains('selected')) return true;
+            }
+        }
+    }
+    return false;
+}
+
+function toggleE2SearchItem(el, catLabel, itemText) {
+    // Find and toggle the actual checkbox in E2
+    const cats = document.querySelectorAll('#e2Categories .collapsible-category, #e2Categories .e2-grid .collapsible-category');
+    for (const cat of cats) {
+        const label = cat.querySelector('.cat-label');
+        if (label && label.textContent.trim() === catLabel) {
+            const opts = cat.querySelectorAll('.option.checkbox');
+            for (const opt of opts) {
+                const title = opt.querySelector('.option-title');
+                if (title && title.textContent.trim() === itemText) {
+                    toggleCheckbox(opt);
+                    // Update search result appearance
+                    el.classList.toggle('checked');
+                    updateCatCount(cat);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+// (E2 search removed — not used in EngLeng Feature-Only survey)
+
+</script>
+</body>
+</html>
